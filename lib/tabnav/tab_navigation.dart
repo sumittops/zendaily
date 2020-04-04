@@ -39,8 +39,13 @@ class _TabNavigationState extends State<TabNavigation>
   void initState() {
     super.initState();
     _animationController =
-        AnimationController(vsync: this, duration: Duration(milliseconds: 333));
-    _animation = Tween<double>(begin: 0, end: 1).animate(_animationController)
+        AnimationController(vsync: this, duration: Duration(milliseconds : 333));
+    CurvedAnimation _curvedAnim = CurvedAnimation(
+      curve: Curves.easeIn,
+      reverseCurve: Curves.bounceOut,
+      parent: _animationController
+    );
+    _animation = Tween<double>(begin: 0, end: 1).animate(_curvedAnim)
       ..addListener(() {
         setState(() {});
       });
@@ -65,11 +70,8 @@ class _TabNavigationState extends State<TabNavigation>
 
   double getOffsetForPageIndex(double width, int index) {
     double prevPosition = (index - prevTabIdx) * width;
-    if (currentTabIdx > prevTabIdx) {
-      return prevPosition - width * _animation.value;
-    } else {
-      return prevPosition + width * _animation.value;
-    }
+    return prevPosition + (prevTabIdx - currentTabIdx) * width * _animation.value;
+    
   }
 
   @override
@@ -78,8 +80,6 @@ class _TabNavigationState extends State<TabNavigation>
     return Stack(
       children: <Widget>[
         Container(
-          width: double.infinity,
-          height: double.infinity,
           color: Colors.grey[300],
           child: AnimatedBuilder(
             animation: _animation,

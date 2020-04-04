@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:neumorphic/neumorphic.dart';
 
 class TabNavButton extends StatelessWidget {
   final bool active;
@@ -21,33 +22,19 @@ class TabNavButton extends StatelessWidget {
       onTap: () {
         onSelect(position);
       },
-      child: AnimatedContainer(
+      child: NeuCard(
         height: 72,
         width: 72,
-        duration: Duration(milliseconds: 333),
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(36),
-          color: active ? Colors.cyan : Colors.grey[300],
-          boxShadow: active ? [
-            BoxShadow(
-              color: Colors.cyan[800], 
-              offset: Offset(3, 3),
-              blurRadius: 5
-            )
-          ] : [
-            BoxShadow(
-              color: Colors.grey[400], 
-              offset: Offset(2, 2),
-              blurRadius: 5
-            )
-          ]
+        bevel: 2,
+        decoration: NeumorphicDecoration(
+          borderRadius: BorderRadius.all(Radius.circular(36))
         ),
         child: Transform.scale(
             scale: active ? 1.5 : 1,
             child: Icon(
             iconData,
             size: 28,
-            color: active ? Colors.white : Colors.black38
+            color: active ? Colors.cyan : Colors.black38
           ),
         ),
       ),
