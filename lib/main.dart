@@ -1,40 +1,17 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:zendaily/tabnav/tab_navigation.dart';
+import 'package:hive/hive.dart';
+import 'package:hive_flutter/hive_flutter.dart';
+// import 'package:path_provider/path_provider.dart' as path_provider;
+import 'package:zendaily/models/recurrence_type.dart';
+import 'package:zendaily/models/task.dart';
+import 'package:zendaily/app.dart';
 
-Color _color = Color(0xFFf2f2f2); // Colors.grey[200]
+void main() async {
+  // WidgetsFlutterBinding.ensureInitialized();
+  // final appDocDirectory = await path_provider.getApplicationDocumentsDirectory();
+  await  Hive.initFlutter();
+  Hive.registerAdapter(RecurrenceTypeAdapter());
+  Hive.registerAdapter(TaskAdapter());
 
-void main() => runApp(NeumorphicApp());
-
-class NeumorphicApp extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
-      statusBarColor: Colors.transparent,
-      statusBarBrightness: Brightness.light,
-      statusBarIconBrightness: Brightness.dark,
-      systemNavigationBarColor: _color,
-      systemNavigationBarIconBrightness: Brightness.dark,
-    ));
-
-    return MaterialApp(
-      title: 'Zendaily',
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        platform: TargetPlatform.iOS,
-        primarySwatch: Colors.blue,
-        backgroundColor: Color.lerp(_color, Colors.black, 0.005),
-        scaffoldBackgroundColor: _color,
-        dialogBackgroundColor: Colors.grey[300],
-        appBarTheme: AppBarTheme(
-          brightness: Brightness.light,
-          color: _color,
-          iconTheme: IconThemeData(
-            color: Colors.black,
-          ),
-        ),
-      ),
-      home: TabNavigation(),
-    );
-  }
+  runApp(App());
 }

@@ -1,14 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:zendaily/fun.dart';
 import 'package:zendaily/home.dart';
-import 'package:zendaily/productive.dart';
+import 'package:zendaily/tasks_page.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+
 import 'tab_nav_button.dart';
+
 
 class TabNavigation extends StatefulWidget {
   final List<Map<String, dynamic>> tabData = [
-    {'icon': Icons.ac_unit, 'name': 'Productive', 'index': 0},
-    {'icon': Icons.home, 'name': 'Home', 'index': 1},
-    {'icon': Icons.ac_unit, 'name': 'Fun', 'index': 2}
+    {'icon': FontAwesomeIcons.yinYang, 'name': 'Home', 'index': 0},
+    {'icon': FontAwesomeIcons.tasks, 'name': 'Productive', 'index': 1},
+    {'icon': FontAwesomeIcons.schlix, 'name': 'Fun', 'index': 2 }
   ];
 
   @override
@@ -88,16 +90,16 @@ class _TabNavigationState extends State<TabNavigation>
                 children: <Widget>[
                   Transform.translate(
                       offset:
-                          Offset(getOffsetForPageIndex(screenWidth, 0), 0),
-                      child: Productive()),
+                          Offset(getOffsetForPageIndex(screenWidth, 1), 0),
+                      child: TasksPage(title: 'Productive',)),
                   Transform.translate(
                       offset:
-                          Offset(getOffsetForPageIndex(screenWidth, 1), 0),
+                          Offset(getOffsetForPageIndex(screenWidth, 0), 0),
                       child: Home()),
                   Transform.translate(
                       offset:
                           Offset(getOffsetForPageIndex(screenWidth, 2), 0),
-                      child: Fun()),
+                      child: TasksPage(title: 'Fun Tasks')),
                 ],
               );
             },
