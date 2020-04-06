@@ -65,54 +65,57 @@ class _AddTaskState extends State<AddTask> {
       ),
       body: Container(
         padding: EdgeInsets.symmetric(vertical: 20, horizontal: 18),
-        child: Column(
-          children: <Widget>[
-            NeuCard(
-              margin: EdgeInsets.only(bottom: 16),
-              padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-              child: TextField(
-                  textAlignVertical: TextAlignVertical.center,
-                  onChanged: onTitleChange,
-                  controller: _titleController),
-            ),
-            NeuCard(
-                margin: EdgeInsets.only(bottom: 16),
-                padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+        child: Form(
+          key: widget.formKey,
+          child: Column(
+            children: <Widget>[
+              NeuCard(
+                  margin: EdgeInsets.only(bottom: 16),
+                  padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
                 child: TextField(
                     textAlignVertical: TextAlignVertical.center,
-                    onChanged: onCategoryChange,
-                    controller: _categoryController)),
-            NeuCard(
-              margin: EdgeInsets.only(bottom: 16),
-              padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-              child: Row(
-                children: <Widget>[
-                  Expanded(
-                    child: DropdownButton(
-                      isExpanded: true,
-                      value: recurrenceType,
-                      hint: Text('Select Recurrence',
-                          style: Theme.of(context).textTheme.bodyText2),
-                      items: recurrenceOptions.map((item) {
-                        return DropdownMenuItem(
-                          value: item,
-                          child: Text(
-                            recurrenceLabel[item],
-                            style: Theme.of(context).textTheme.bodyText2
-                          ),
-                        );
-                      }).toList(),
-                      onChanged: onRecurrenceChange
-                    ),
-                  ),
-                ],
+                    onChanged: onTitleChange,
+                    controller: _titleController),
               ),
-            ),
-            FlatButton(
-              onPressed: onFormSubmit,
-              child: Text('Add', style: Theme.of(context).textTheme.bodyText2),
-            ),
-          ],
+              NeuCard(
+                  margin: EdgeInsets.only(bottom: 16),
+                  padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                  child: TextField(
+                      textAlignVertical: TextAlignVertical.center,
+                      onChanged: onCategoryChange,
+                      controller: _categoryController)),
+              NeuCard(
+                margin: EdgeInsets.only(bottom: 16),
+                padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                child: Row(
+                  children: <Widget>[
+                    Expanded(
+                      child: DropdownButton(
+                        isExpanded: true,
+                        value: recurrenceType,
+                        hint: Text('Select Recurrence',
+                            style: Theme.of(context).textTheme.bodyText2),
+                        items: recurrenceOptions.map((item) {
+                          return DropdownMenuItem(
+                            value: item,
+                            child: Text(
+                              recurrenceLabel[item],
+                              style: Theme.of(context).textTheme.bodyText2
+                            ),
+                          );
+                        }).toList(),
+                        onChanged: onRecurrenceChange
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              FlatButton(
+                onPressed: onFormSubmit,
+                child: Text('Add', style: Theme.of(context).textTheme.bodyText2),
+              ),
+            ],
+          ),
         ),
       ),
     );

@@ -1,8 +1,22 @@
+import 'dart:math';
 import 'package:flutter/material.dart';
+import 'package:hive/hive.dart';
 import 'package:neumorphic/neumorphic.dart';
+import 'package:zendaily/models/task.dart';
+import 'package:zendaily/pages/task_launch.dart';
 
 
 class Home extends StatelessWidget {
+
+  void handleTaskLaunch(BuildContext context, String type) {
+    Box<Task> box = Hive.box('tasks');
+    final totalTasks = box.length;
+    final index = Random().nextInt(totalTasks);
+    Navigator.push(context, MaterialPageRoute(
+      builder: (context) => TaskLaunch(task: box.getAt(index))
+    ));
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -23,7 +37,7 @@ class Home extends StatelessWidget {
                 Text('Do something', style: Theme.of(context).textTheme.headline2),
                 NeuButton(
                   onPressed: () {
-                    print('Productive');
+                    handleTaskLaunch(context, 'productive');
                   },
 
                   child: Text('Productive', style: Theme.of(context).textTheme.button),
@@ -31,7 +45,7 @@ class Home extends StatelessWidget {
                 Text('Or', style: Theme.of(context).textTheme.headline4,),
                 NeuButton(
                   onPressed: () {
-                    print('Fun');
+                    handleTaskLaunch(context, 'fun');
                   },
                   child: Text('Fun', style: Theme.of(context).textTheme.button),
                 ),

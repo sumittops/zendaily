@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:zendaily/home.dart';
-import 'package:zendaily/tasks_page.dart';
+import 'package:zendaily/pages/home.dart';
+import 'package:zendaily/pages/tasks_page.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import 'tab_nav_button.dart';
@@ -8,9 +8,9 @@ import 'tab_nav_button.dart';
 
 class TabNavigation extends StatefulWidget {
   final List<Map<String, dynamic>> tabData = [
-    {'icon': FontAwesomeIcons.yinYang, 'name': 'Home', 'index': 0},
-    {'icon': FontAwesomeIcons.tasks, 'name': 'Productive', 'index': 1},
-    {'icon': FontAwesomeIcons.schlix, 'name': 'Fun', 'index': 2 }
+    {'icon': FontAwesomeIcons.yinYang, 'name': 'Home', 'index': 0,  'key': GlobalKey<NavigatorState>(), 'widget': Home()},
+    {'icon': FontAwesomeIcons.tasks, 'name': 'Productive', 'index': 1, 'key': GlobalKey<NavigatorState>(), 'widget': TasksPage(title: 'Productive',)},
+    {'icon': FontAwesomeIcons.schlix, 'name': 'Fun', 'index': 2,  'key': GlobalKey<NavigatorState>(), 'widget': TasksPage(title: 'Fun',)}
   ];
 
   @override
@@ -87,20 +87,19 @@ class _TabNavigationState extends State<TabNavigation>
             animation: _animation,
             builder: (context, child) {
               return Stack(
-                children: <Widget>[
-                  Transform.translate(
-                      offset:
-                          Offset(getOffsetForPageIndex(screenWidth, 1), 0),
-                      child: TasksPage(title: 'Productive',)),
-                  Transform.translate(
-                      offset:
-                          Offset(getOffsetForPageIndex(screenWidth, 0), 0),
-                      child: Home()),
-                  Transform.translate(
-                      offset:
-                          Offset(getOffsetForPageIndex(screenWidth, 2), 0),
-                      child: TasksPage(title: 'Fun Tasks')),
-                ],
+                children: widget.tabData.map((tabD) {
+                  return Transform.translate(
+                    offset: Offset(getOffsetForPageIndex(screenWidth, tabD['index']), 0),
+                    child: Navigator(
+                      key: tabD['key'],
+                      onGenerateRoute: (RouteSettings settings) {
+                        return MaterialPageRoute(
+                          builder: (_) => tabD['widget']
+                        );
+                      },
+                    ),
+                  );
+                }).toList(),
               );
             },
           ),
@@ -111,8 +110,9 @@ class _TabNavigationState extends State<TabNavigation>
           right: 0,
           height: 100,
           child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: _buildTabs()),
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: _buildTabs(),
+          ),
         ),
       ],
     );

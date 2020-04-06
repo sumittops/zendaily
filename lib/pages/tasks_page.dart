@@ -3,7 +3,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:neumorphic/neumorphic.dart';
-import 'package:zendaily/add_task.dart';
+import 'package:zendaily/pages/add_task.dart';
 import 'package:zendaily/models/task.dart';
 
 class TasksPage extends StatelessWidget {
@@ -71,6 +71,7 @@ class TasksPage extends StatelessWidget {
           Column(
             children: <Widget>[
               NeuCard(
+                curveType: CurveType.concave,
                 width: double.infinity,
                 padding: EdgeInsets.symmetric(vertical: 32, horizontal: 14),
                 margin: EdgeInsets.only(bottom: 24),
@@ -82,8 +83,9 @@ class TasksPage extends StatelessWidget {
               _buildList()
             ],
           ),
-          Align(
-            alignment: Alignment.bottomRight,
+          Positioned(
+            right: 20,
+            bottom: 120,
             child: Container(
               height: 54,
               width: 54,
@@ -94,7 +96,7 @@ class TasksPage extends StatelessWidget {
                   Navigator.of(context).push(
                     MaterialPageRoute(
                       builder: (context) => AddTask()
-                    )
+                    ) 
                   )
                 },
                 child: Center(child: Icon(FontAwesomeIcons.plusCircle, color: Colors.grey,)),
