@@ -5,6 +5,8 @@ import 'package:hive_flutter/hive_flutter.dart';
 import 'package:neumorphic/neumorphic.dart';
 import 'package:zendaily/pages/add_task.dart';
 import 'package:zendaily/models/task.dart';
+import 'package:zendaily/animations/fade_in.dart';
+
 
 class TasksPage extends StatelessWidget {
   final String title;
@@ -28,27 +30,29 @@ class TasksPage extends StatelessWidget {
           shrinkWrap: true,
           itemBuilder: (context, index) {
             Task task = tasksBox.getAt(index);
-            return NeuCard(
-              bevel: 6,
-              padding: EdgeInsets.symmetric(vertical: 8, horizontal: 12),
-              margin: EdgeInsets.only(bottom: 32, left: 16, right: 16),
-              decoration: NeumorphicDecoration(
-                  borderRadius: BorderRadius.all(Radius.circular(12))),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  Text(
-                    task.title,
-                    style: Theme.of(context)
-                        .textTheme
-                        .bodyText2
-                        .copyWith(fontSize: 18),
-                  ),
-                  Text(
-                    task.category,
-                    style: Theme.of(context).textTheme.bodyText2,
-                  )
-                ],
+            return FadeInTransition(
+              child: NeuCard(
+                bevel: 6,
+                padding: EdgeInsets.symmetric(vertical: 8, horizontal: 12),
+                margin: EdgeInsets.only(bottom: 32, left: 16, right: 16),
+                decoration: NeumorphicDecoration(
+                    borderRadius: BorderRadius.all(Radius.circular(12))),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Text(
+                      task.title,
+                      style: Theme.of(context)
+                          .textTheme
+                          .bodyText2
+                          .copyWith(fontSize: 18),
+                    ),
+                    Text(
+                      task.category,
+                      style: Theme.of(context).textTheme.bodyText2,
+                    )
+                  ],
+                ),
               ),
             );
           },

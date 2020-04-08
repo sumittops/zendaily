@@ -20,18 +20,20 @@ class TaskAdapter extends TypeAdapter<Task> {
       title: fields[0] as String,
       category: fields[1] as String,
       recurrenceType: fields[2] as RecurrenceType,
-    );
+    )..executionRecord = (fields[3] as HiveList)?.castHiveList();
   }
 
   @override
   void write(BinaryWriter writer, Task obj) {
     writer
-      ..writeByte(3)
+      ..writeByte(4)
       ..writeByte(0)
       ..write(obj.title)
       ..writeByte(1)
       ..write(obj.category)
       ..writeByte(2)
-      ..write(obj.recurrenceType);
+      ..write(obj.recurrenceType)
+      ..writeByte(3)
+      ..write(obj.executionRecord);
   }
 }

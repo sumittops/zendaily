@@ -3,10 +3,11 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:neumorphic/neumorphic.dart';
 import 'package:zendaily/models/task.dart';
+import 'package:zendaily/models/task_execution_record.dart';
 
 class TaskRunner extends StatefulWidget {
   final Task task;
-  TaskRunner(this.task);
+  TaskRunner(this.task); 
 
   @override
   _TaskRunnerState createState() => _TaskRunnerState();
@@ -17,12 +18,14 @@ class _TaskRunnerState extends State<TaskRunner>
   AnimationController _animationController;
   Timer _timer;
   int _seconds = 0;
+  TaskExecutionRecord executionRecord;
 
   @override
   void initState() {
     super.initState();
     _animationController =
         AnimationController(vsync: this, duration: Duration(seconds: 1));
+    executionRecord = TaskExecutionRecord(startTime: DateTime.now());
     startTimer();
   }
 
@@ -35,12 +38,18 @@ class _TaskRunnerState extends State<TaskRunner>
     });
   }
 
+  void handleDone() {
+    executionRecord.endTime = DateTime.now();
+    executionRecord.updateDuration();
+    widget.task.executionRecord.add(executionRecord);
+  }
+
   Widget _buildTimer(BuildContext context) {
     final timePassed = Duration(seconds: _seconds);
     final textTheme = Theme.of(context).textTheme;
     return NeuCard(
       bevel: 4,
-      margin: EdgeInsets.all(12),
+      margin: EdgeInsets.all(12), 
       decoration: NeumorphicDecoration(borderRadius: BorderRadius.circular(12)),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -90,10 +99,19 @@ class _TaskRunnerState extends State<TaskRunner>
           ),
         ),
         body: Container(
-          padding: EdgeInsets.symmetric(horizontal: 16),
+          padding: EdgeInsets.symmetric(horizontal: 16, vertical: 20),
           child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
-              _buildTimer(context)
+              _buildTimer(context),
+              NeuButton(
+                onPressed: handleDone,
+                child: Text('Done for now'),
+              ),
+              NeuButton(
+                onPressed: null,
+                child: Text('Discard and do later'),
+              )
             ],
           ),
         ),
