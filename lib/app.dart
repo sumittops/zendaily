@@ -2,9 +2,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:hive/hive.dart';
-import 'package:zendaily/models/task.dart';
-import 'package:zendaily/models/task_execution_record.dart';
-import 'tabnav/tab_navigation.dart';
+import 'package:zendaily/models/models.dart';
+import 'package:zendaily/tabnav/tab_navigation.dart';
+import 'package:zendaily/utils.dart';
 
 class App extends StatefulWidget {
   @override
@@ -12,7 +12,17 @@ class App extends StatefulWidget {
 }
 
 class _AppState extends State<App> {
-  final Color _color = Color(0xFFf2f2f2); 
+  final Color _color = Color(0xFFf2f2f2);
+
+  Future<List<dynamic>> _getBoxFutures() {
+    return Future.wait([
+      Hive.openBox<Area>(BOX_TYPE_AREA),
+      Hive.openBox<Project>(BOX_TYPE_PROJECT),
+      Hive.openBox<Task>(BOX_TYPE_TASK),
+      Hive.openBox<TaskExecutionRecord>(BOX_TYPE_TASK_EXECUTION)
+    ]);
+  }
+
   @override
   Widget build(BuildContext context) {
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
@@ -41,10 +51,7 @@ class _AppState extends State<App> {
         ),
       ),
       home: FutureBuilder(
-        future: Future.wait([
-          Hive.openBox<Task>('tasks'),
-          Hive.openBox<TaskExecutionRecord>('task_execution')
-        ]),
+        future: _getBoxFutures(),
         builder: (BuildContext context, AsyncSnapshot snapshot) {
           if (snapshot.connectionState == ConnectionState.done) {
             if (snapshot.hasError) {

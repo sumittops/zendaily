@@ -23,7 +23,7 @@ class TaskListItem extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          Text(task.title, style: textTheme.headline4),
+          Text(task.title, style: textTheme.headline6),
           SizedBox(height: 8,),
           Text(task.category, style: textTheme.bodyText1),
         ],
