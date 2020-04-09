@@ -64,7 +64,7 @@ class TaskLaunch extends StatelessWidget {
   Widget build(BuildContext context) {
     final TextTheme textTheme = Theme.of(context).textTheme;
     return Scaffold(
-      appBar: AppBar(
+      appBar: NeuAppBar(
         title: Text('Ready to Launch', style: textTheme.headline6,),
       ),
       body: Container(

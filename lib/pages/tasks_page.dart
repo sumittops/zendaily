@@ -6,6 +6,7 @@ import 'package:neumorphic/neumorphic.dart';
 import 'package:zendaily/pages/add_task.dart';
 import 'package:zendaily/models/task.dart';
 import 'package:zendaily/animations/fade_in.dart';
+import 'package:zendaily/shared/task_list_item.dart';
 
 
 class TasksPage extends StatelessWidget {
@@ -31,29 +32,7 @@ class TasksPage extends StatelessWidget {
           itemBuilder: (context, index) {
             Task task = tasksBox.getAt(index);
             return FadeInTransition(
-              child: NeuCard(
-                bevel: 6,
-                padding: EdgeInsets.symmetric(vertical: 8, horizontal: 12),
-                margin: EdgeInsets.only(bottom: 32, left: 16, right: 16),
-                decoration: NeumorphicDecoration(
-                    borderRadius: BorderRadius.all(Radius.circular(12))),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    Text(
-                      task.title,
-                      style: Theme.of(context)
-                          .textTheme
-                          .bodyText2
-                          .copyWith(fontSize: 18),
-                    ),
-                    Text(
-                      task.category,
-                      style: Theme.of(context).textTheme.bodyText2,
-                    )
-                  ],
-                ),
-              ),
+              child: TaskListItem(task: task)
             );
           },
           itemCount: tasksBox.length,
@@ -84,7 +63,9 @@ class TasksPage extends StatelessWidget {
                 child:
                     Text(title, style: Theme.of(context).textTheme.headline4),
               ),
-              _buildList()
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 12),
+                child: _buildList())
             ],
           ),
           Positioned(

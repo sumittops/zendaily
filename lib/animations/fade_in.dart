@@ -8,8 +8,8 @@ class FadeInTransition extends StatefulWidget {
   FadeInTransition({
     @required
     this.child,
-    this.duration = const Duration(milliseconds: 333),
-    this.distance = 10  
+    this.duration = const Duration(milliseconds: 500),
+    this.distance = 100
   });
 
   @override

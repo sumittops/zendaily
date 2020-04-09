@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:hive/hive.dart';
 import 'package:zendaily/models/task.dart';
+import 'package:zendaily/models/task_execution_record.dart';
 import 'tabnav/tab_navigation.dart';
 
 class App extends StatefulWidget {
@@ -40,7 +41,10 @@ class _AppState extends State<App> {
         ),
       ),
       home: FutureBuilder(
-        future: Hive.openBox<Task>('tasks'),
+        future: Future.wait([
+          Hive.openBox<Task>('tasks'),
+          Hive.openBox<TaskExecutionRecord>('task_execution')
+        ]),
         builder: (BuildContext context, AsyncSnapshot snapshot) {
           if (snapshot.connectionState == ConnectionState.done) {
             if (snapshot.hasError) {

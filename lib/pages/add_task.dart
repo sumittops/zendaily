@@ -60,7 +60,7 @@ class _AddTaskState extends State<AddTask> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
+      appBar: NeuAppBar(
         title: Text('Add a Task', style: Theme.of(context).textTheme.headline6),
       ),
       body: Container(

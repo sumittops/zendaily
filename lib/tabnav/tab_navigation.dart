@@ -8,9 +8,9 @@ import 'tab_nav_button.dart';
 
 class TabNavigation extends StatefulWidget {
   final List<Map<String, dynamic>> tabData = [
-    {'icon': FontAwesomeIcons.yinYang, 'name': 'Home', 'index': 0,  'key': GlobalKey<NavigatorState>(), 'widget': Home()},
-    {'icon': FontAwesomeIcons.tasks, 'name': 'Productive', 'index': 1, 'key': GlobalKey<NavigatorState>(), 'widget': TasksPage(title: 'Productive',)},
-    {'icon': FontAwesomeIcons.schlix, 'name': 'Fun', 'index': 2,  'key': GlobalKey<NavigatorState>(), 'widget': TasksPage(title: 'Fun',)}
+    { 'initialRoute': '/','icon': FontAwesomeIcons.yinYang, 'name': 'Home', 'index': 0,  'key': GlobalKey<NavigatorState>(), 'widget': Home()},
+    { 'initialRoute': '/productive','icon': FontAwesomeIcons.tasks, 'name': 'Productive', 'index': 1, 'key': GlobalKey<NavigatorState>(), 'widget': TasksPage(title: 'Productive',)},
+    { 'initialRoute': '/chill','icon': FontAwesomeIcons.schlix, 'name': 'Fun', 'index': 2,  'key': GlobalKey<NavigatorState>(), 'widget': TasksPage(title: 'Fun',)}
   ];
 
   @override
@@ -79,42 +79,35 @@ class _TabNavigationState extends State<TabNavigation>
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
-    return Stack(
-      children: <Widget>[
-        Container(
-          color: Colors.grey[300],
-          child: AnimatedBuilder(
-            animation: _animation,
-            builder: (context, child) {
-              return Stack(
-                children: widget.tabData.map((tabD) {
-                  return Transform.translate(
-                    offset: Offset(getOffsetForPageIndex(screenWidth, tabD['index']), 0),
-                    child: Navigator(
-                      key: tabD['key'],
-                      onGenerateRoute: (RouteSettings settings) {
-                        return MaterialPageRoute(
-                          builder: (_) => tabD['widget']
-                        );
-                      },
-                    ),
-                  );
-                }).toList(),
-              );
-            },
-          ),
+    return Scaffold(
+      body: Container(
+        color: Colors.grey[300],
+        child: AnimatedBuilder(
+          animation: _animation,
+          builder: (context, child) {
+            return Stack(
+              children: widget.tabData.map((tabD) {
+                return Transform.translate(
+                  offset: Offset(getOffsetForPageIndex(screenWidth, tabD['index']), 0),
+                  child: Navigator(
+                    key: tabD['key'],
+                    initialRoute: tabD['initialRoute'],
+                    onGenerateRoute: (RouteSettings settings) {
+                      return MaterialPageRoute(
+                        builder: (_) => tabD['widget']
+                      );
+                    },
+                  ),
+                );
+              }).toList(),
+            );
+          },
         ),
-        Positioned(
-          bottom: 0,
-          left: 0,
-          right: 0,
-          height: 100,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: _buildTabs(),
-          ),
-        ),
-      ],
+      ),
+      bottomNavigationBar: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        children: _buildTabs(),
+      ),
     );
   }
 }

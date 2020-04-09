@@ -1,13 +1,15 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:hive/hive.dart';
 import 'package:neumorphic/neumorphic.dart';
 import 'package:zendaily/models/task.dart';
 import 'package:zendaily/models/task_execution_record.dart';
+import 'package:zendaily/utils.dart';
 
 class TaskRunner extends StatefulWidget {
   final Task task;
-  TaskRunner(this.task); 
+  TaskRunner(this.task);
 
   @override
   _TaskRunnerState createState() => _TaskRunnerState();
@@ -15,16 +17,14 @@ class TaskRunner extends StatefulWidget {
 
 class _TaskRunnerState extends State<TaskRunner>
     with SingleTickerProviderStateMixin {
-  AnimationController _animationController;
   Timer _timer;
   int _seconds = 0;
   TaskExecutionRecord executionRecord;
+  bool taskDone = false;
 
   @override
   void initState() {
     super.initState();
-    _animationController =
-        AnimationController(vsync: this, duration: Duration(seconds: 1));
     executionRecord = TaskExecutionRecord(startTime: DateTime.now());
     startTimer();
   }
@@ -38,49 +38,98 @@ class _TaskRunnerState extends State<TaskRunner>
     });
   }
 
+  void stopTimer() {
+    _timer.cancel();
+  }
+
+  void showResult() {
+    setState(() {
+      taskDone = true;
+    });
+  }
+
   void handleDone() {
+    Box<TaskExecutionRecord> box = Hive.box('task_execution');
     executionRecord.endTime = DateTime.now();
     executionRecord.updateDuration();
+    if (widget.task.executionRecord == null) {
+      widget.task.executionRecord = HiveList(box);
+    }
+    box.add(executionRecord);
     widget.task.executionRecord.add(executionRecord);
+    stopTimer();
+    showResult();
   }
 
   Widget _buildTimer(BuildContext context) {
     final timePassed = Duration(seconds: _seconds);
     final textTheme = Theme.of(context).textTheme;
+    final timeInHMS = getDurationInHMS(timePassed);
+    final List<String> timeParts = timeInHMS.split(':');
     return NeuCard(
       bevel: 4,
-      margin: EdgeInsets.all(12), 
+      margin: EdgeInsets.all(12),
+      padding: EdgeInsets.symmetric(vertical: 20),
       decoration: NeumorphicDecoration(borderRadius: BorderRadius.circular(12)),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: <Widget>[
-          SizedBox(
-            width: 64,
-            child: Text(
-              '${timePassed.inHours}',
-              style: textTheme.headline4,
-            ),
+          Text(
+            timeParts[0],
+            style: textTheme.headline4,
           ),
-          SizedBox(
-            width: 10,
+          Text(' : ',
+              textAlign: TextAlign.center, style: textTheme.headline5),
+          Text(
+            timeParts[1],
+            style: textTheme.headline4,
           ),
-          SizedBox(
-            width: 64,
-            child: Text(
-              '${timePassed.inMinutes}',
-              style: textTheme.headline4,
-            ),
+          Text(' : ',
+              textAlign: TextAlign.center, style: textTheme.headline5),
+          Text(
+            timeParts[2],
+            style: textTheme.headline4,
           ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildResultCard(BuildContext context) {
+    final textTheme = Theme.of(context).textTheme;
+    return NeuCard(
+      bevel: 4,
+      padding: EdgeInsets.all(12),
+      margin: EdgeInsets.all(12),
+      decoration: NeumorphicDecoration(borderRadius: BorderRadius.circular(12)),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text('You\'ve just finished doing', style: textTheme.bodyText1),
           SizedBox(
-            width: 10,
+            height: 6,
           ),
+          Text(widget.task.title, style: textTheme.headline5),
           SizedBox(
-            width: 64,
-            child: Text(
-              '${timePassed.inSeconds}',
-              style: textTheme.headline4,
-            ),
+            height: 6,
           ),
+          Row(
+              crossAxisAlignment: CrossAxisAlignment.end,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(widget.task.category),
+                Column(
+                  children: <Widget>[
+                    Text('Time spent', style: textTheme.bodyText1),
+                    SizedBox(
+                      height: 6,
+                    ),
+                    Text(getDurationInHMS(executionRecord.duration),
+                        style: textTheme.headline6)
+                  ],
+                ),
+              ]),
         ],
       ),
     );
@@ -89,31 +138,34 @@ class _TaskRunnerState extends State<TaskRunner>
   @override
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
-    return WillPopScope(
-      onWillPop: () async => true,
-      child: Scaffold(
-        appBar: AppBar(
-          title: Text(
-            widget.task.title,
-            style: textTheme.headline5,
+    final contentList = taskDone ? [
+      _buildResultCard(context)
+    ] : [
+      _buildTimer(context),
+      Flexible(
+        flex: 1,
+        child: Center(
+          child: SizedBox(
+            height: 44,
+            child: NeuButton(
+              onPressed: handleDone,
+              child: Text('Done for now'),
+            ),
           ),
         ),
-        body: Container(
-          padding: EdgeInsets.symmetric(horizontal: 16, vertical: 20),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: <Widget>[
-              _buildTimer(context),
-              NeuButton(
-                onPressed: handleDone,
-                child: Text('Done for now'),
-              ),
-              NeuButton(
-                onPressed: null,
-                child: Text('Discard and do later'),
-              )
-            ],
-          ),
+      )
+    ];
+    return Scaffold(
+      appBar: NeuAppBar(
+        title: Text(
+          widget.task.title,
+          style: textTheme.headline5,
+        ),
+      ),
+      body: Container(
+        padding: EdgeInsets.symmetric(horizontal: 16, vertical: 20),
+        child: Column(
+          children: contentList
         ),
       ),
     );
