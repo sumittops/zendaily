@@ -25,7 +25,7 @@ class TaskListItem extends StatelessWidget {
         children: <Widget>[
           Text(task.title, style: textTheme.headline6),
           SizedBox(height: 8,),
-          Text(task.category, style: textTheme.bodyText1),
+          Text(task.areaId, style: textTheme.bodyText1),
         ],
       ),
     );

@@ -40,7 +40,7 @@ class TaskLaunch extends StatelessWidget {
                     SizedBox(height: 10),
                     Text(recurrenceLabel[task.recurrenceType], style: textTheme.bodyText1),
                     SizedBox(height: 10),
-                    Text(task.category, style: textTheme.bodyText1),
+                    Text(task.areaId, style: textTheme.bodyText1),
                 ]
               ),
             ),

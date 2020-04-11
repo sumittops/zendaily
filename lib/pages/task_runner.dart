@@ -25,7 +25,10 @@ class _TaskRunnerState extends State<TaskRunner>
   @override
   void initState() {
     super.initState();
-    executionRecord = TaskExecutionRecord(startTime: DateTime.now());
+    executionRecord = TaskExecutionRecord(
+      startTime: DateTime.now(),
+      taskId: widget.task.id
+    );
     startTimer();
   }
 
@@ -51,12 +54,7 @@ class _TaskRunnerState extends State<TaskRunner>
   void handleDone() {
     Box<TaskExecutionRecord> box = Hive.box('task_execution');
     executionRecord.endTime = DateTime.now();
-    executionRecord.updateDuration();
-    if (widget.task.executionRecord == null) {
-      widget.task.executionRecord = HiveList(box);
-    }
     box.add(executionRecord);
-    widget.task.executionRecord.add(executionRecord);
     stopTimer();
     showResult();
   }
@@ -118,7 +116,7 @@ class _TaskRunnerState extends State<TaskRunner>
               crossAxisAlignment: CrossAxisAlignment.end,
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text(widget.task.category),
+                Text(widget.task.areaId),
                 Column(
                   children: <Widget>[
                     Text('Time spent', style: textTheme.bodyText1),

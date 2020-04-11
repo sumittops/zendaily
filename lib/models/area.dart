@@ -1,22 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
-import 'package:zendaily/models/project.dart';
+import 'package:uuid/uuid.dart';
 
 part 'area.g.dart';
 
-@HiveType(typeId: 3)
+@HiveType(typeId: 1)
 class Area extends HiveObject {
+
   @HiveField(0)
+  String id;
+  
+  @HiveField(1)
   String name;
 
-  @HiveField(1)
-  HiveList<Project> projects;
-
-  @HiveField(2)
-  String description;
-
   Area({
-    @required this.name,
-    this.description = ''
-  });
+    @required this.name
+  }) : id = Uuid().v1();
 }

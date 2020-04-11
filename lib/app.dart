@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:hive/hive.dart';
 import 'package:zendaily/models/models.dart';
+import 'package:zendaily/pages/onboard/onboard.dart';
 import 'package:zendaily/tabnav/tab_navigation.dart';
 import 'package:zendaily/utils.dart';
 
@@ -19,6 +20,7 @@ class _AppState extends State<App> {
       Hive.openBox<Area>(BOX_TYPE_AREA),
       Hive.openBox<Project>(BOX_TYPE_PROJECT),
       Hive.openBox<Task>(BOX_TYPE_TASK),
+      Hive.openBox<Resource>(BOX_TYPE_RESOURCE),
       Hive.openBox<TaskExecutionRecord>(BOX_TYPE_TASK_EXECUTION)
     ]);
   }
@@ -61,7 +63,13 @@ class _AppState extends State<App> {
                 ),
               );
             }
-            return TabNavigation();
+            Box boxArea = Hive.box<Area>(BOX_TYPE_AREA);
+            Box projectArea = Hive.box<Project>(BOX_TYPE_PROJECT);
+            Box taskArea  = Hive.box<Task>(BOX_TYPE_TASK);
+            if (boxArea.isEmpty || projectArea.isEmpty || taskArea.isEmpty) {
+              return Onboard();
+            }
+          return TabNavigation();
           }
           return Scaffold();
         },

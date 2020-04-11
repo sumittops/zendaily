@@ -2,7 +2,7 @@ import 'package:hive/hive.dart';
 
 part 'recurrence_type.g.dart';
 
-@HiveType(adapterName: 'RecurrenceTypeAdapter', typeId: 0)
+@HiveType(typeId: 3)
 enum RecurrenceType {
   @HiveField(0)
   daily,

@@ -1,54 +1,57 @@
 import 'package:flutter/material.dart';
 import 'package:neumorphic/neumorphic.dart';
+import 'package:zendaily/models/models.dart';
 import 'package:zendaily/models/recurrence_type.dart';
-import 'package:hive/hive.dart';
 import 'package:zendaily/models/task.dart';
 
 class AddTask extends StatefulWidget {
   final formKey = GlobalKey<FormState>();
+  final Area area;
+  final Project project;
+  final Function onCreate;
   @override
   _AddTaskState createState() => _AddTaskState();
+  
+  AddTask({
+    @required this.area,
+    @required this.project,
+    @required this.onCreate
+  });
+  
 }
 
 class _AddTaskState extends State<AddTask> {
-  final TextEditingController _titleController = TextEditingController();
-  final TextEditingController _categoryController = TextEditingController();
   final List<RecurrenceType> recurrenceOptions = [
+    RecurrenceType.nonrecurring,
     RecurrenceType.daily,
     RecurrenceType.weekly,
-    RecurrenceType.monthly
+    RecurrenceType.monthly,
   ];
   final Map<RecurrenceType, String> recurrenceLabel = {
+    RecurrenceType.nonrecurring: 'One time',
     RecurrenceType.daily: 'Daily',
     RecurrenceType.weekly: 'Weekly',
     RecurrenceType.monthly: 'Monthly'
   };
 
   String taskTitle = '';
-  String taskCategory = '';
-  RecurrenceType recurrenceType = RecurrenceType.daily;
+  RecurrenceType recurrenceType = RecurrenceType.nonrecurring;
 
   void onFormSubmit() {
-    Box<Task> tasksBox = Hive.box<Task>('tasks');
-    if (taskCategory.length > 0 && taskTitle.length > 0 && recurrenceType != null) {
-      tasksBox.add(Task(
-          areaId: ';X',
-          projectId: 'sda',
+    if (taskTitle.length > 0 && recurrenceType != null) {
+      final newTask = Task(
+          areaId: widget.area.id,
+          projectId: widget.project.id,
           title: taskTitle,
-          recurrenceType: recurrenceType));
-      Navigator.of(context).pop();
+          recurrenceType: recurrenceType
+      );
+      widget.onCreate(newTask);
     }
   }
 
   void onTitleChange(String value) {
     setState(() {
       taskTitle = value;
-    });
-  }
-
-  void onCategoryChange(String value) {
-    setState(() {
-      taskCategory = value;
     });
   }
 
@@ -60,11 +63,7 @@ class _AddTaskState extends State<AddTask> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: NeuAppBar(
-        title: Text('Add a Task', style: Theme.of(context).textTheme.headline6),
-      ),
-      body: Container(
+    return  Container(
         padding: EdgeInsets.symmetric(vertical: 20, horizontal: 18),
         child: Form(
           key: widget.formKey,
@@ -76,15 +75,8 @@ class _AddTaskState extends State<AddTask> {
                 child: TextField(
                     textAlignVertical: TextAlignVertical.center,
                     onChanged: onTitleChange,
-                    controller: _titleController),
+                  ),
               ),
-              NeuCard(
-                  margin: EdgeInsets.only(bottom: 16),
-                  padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                  child: TextField(
-                      textAlignVertical: TextAlignVertical.center,
-                      onChanged: onCategoryChange,
-                      controller: _categoryController)),
               NeuCard(
                 margin: EdgeInsets.only(bottom: 16),
                 padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
@@ -111,14 +103,13 @@ class _AddTaskState extends State<AddTask> {
                   ],
                 ),
               ),
-              FlatButton(
+              NeuButton(
                 onPressed: onFormSubmit,
                 child: Text('Add', style: Theme.of(context).textTheme.bodyText2),
               ),
             ],
           ),
         ),
-      ),
     );
   }
 }

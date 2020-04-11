@@ -8,7 +8,7 @@ part of 'recurrence_type.dart';
 
 class RecurrenceTypeAdapter extends TypeAdapter<RecurrenceType> {
   @override
-  final typeId = 0;
+  final typeId = 3;
 
   @override
   RecurrenceType read(BinaryReader reader) {

@@ -8,7 +8,7 @@ part of 'project.dart';
 
 class ProjectAdapter extends TypeAdapter<Project> {
   @override
-  final typeId = 4;
+  final typeId = 2;
 
   @override
   Project read(BinaryReader reader) {
@@ -17,11 +17,10 @@ class ProjectAdapter extends TypeAdapter<Project> {
       for (var i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
     return Project(
-      name: fields[0] as String,
-      deadline: fields[1] as DateTime,
-    )
-      ..tasks = (fields[2] as HiveList)?.castHiveList()
-      ..resources = (fields[3] as HiveList)?.castHiveList();
+      name: fields[1] as String,
+      areaId: fields[3] as String,
+      deadline: fields[2] as DateTime,
+    )..id = fields[0] as String;
   }
 
   @override
@@ -29,12 +28,12 @@ class ProjectAdapter extends TypeAdapter<Project> {
     writer
       ..writeByte(4)
       ..writeByte(0)
-      ..write(obj.name)
+      ..write(obj.id)
       ..writeByte(1)
-      ..write(obj.deadline)
+      ..write(obj.name)
       ..writeByte(2)
-      ..write(obj.tasks)
+      ..write(obj.deadline)
       ..writeByte(3)
-      ..write(obj.resources);
+      ..write(obj.areaId);
   }
 }

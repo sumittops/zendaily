@@ -1,26 +1,31 @@
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
-import 'package:zendaily/models/task.dart';
+import 'package:uuid/uuid.dart';
 
 part 'project.g.dart';
 
-@HiveType(typeId: 4)
+@HiveType(typeId: 2)
 class Project extends HiveObject {
   @HiveField(0)
-  final String name;
+  String id;
 
   @HiveField(1)
-  final DateTime deadline;
+  final String name;
 
   @HiveField(2)
-  HiveList<Task> tasks;
+  final DateTime deadline;
 
   @HiveField(3)
-  HiveList<dynamic> resources;
+  String areaId;
 
+  @HiveField(4)
+  String description;
+  
   Project({
     @required this.name,
-    @required this.deadline
-  });
+    @required this.areaId,
+    @required this.deadline,
+    this.description = ''
+  }) : id = Uuid().v1() ;
 
 }

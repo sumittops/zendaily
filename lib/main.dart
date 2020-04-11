@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:zendaily/models/models.dart';
@@ -14,5 +15,7 @@ void main() async {
   Hive.registerAdapter<TaskExecutionRecord>(TaskExecutionRecordAdapter());
 
 
-  runApp(App());
+  runApp(
+    Phoenix(child: App())
+  );
 }

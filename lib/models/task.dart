@@ -1,26 +1,35 @@
+import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
+import 'package:uuid/uuid.dart';
 import 'package:zendaily/models/recurrence_type.dart';
-import 'package:zendaily/models/task_execution_record.dart';
 
 
 part 'task.g.dart';
 
 
-@HiveType(adapterName: 'TaskAdapter', typeId: 1)
+@HiveType(typeId: 6)
 class Task extends HiveObject {
   @HiveField(0)
-  final String title;
+  final String id;
+
   @HiveField(1)
-  final String category;
+  final 
+  String title;
+
   @HiveField(2)
   final RecurrenceType recurrenceType;
-  @HiveField(3)
-  HiveList<TaskExecutionRecord> executionRecord;
 
+  @HiveField(3)
+  final String areaId;
+
+  @HiveField(4)
+  final String projectId;
+  
   Task({
-    this.title,
-    this.category,
-    this.recurrenceType
-  });
+    @required this.title,
+    @required this.recurrenceType,
+    @required this.areaId,
+    @required this.projectId,
+  }) : id = Uuid().v1();
 
 }
