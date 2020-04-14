@@ -1,4 +1,6 @@
 
+import 'package:flutter/material.dart';
+
 String toTwoDigits(int n) {
   if (n >= 10) {
     return '$n';
@@ -16,7 +18,15 @@ const String BOX_TYPE_RESOURCE = 'resources';
 const String BOX_TYPE_TASK = 'tasks';
 const String BOX_TYPE_TASK_EXECUTION = 'task_execution';
 
-
+List<int> areaColors = [
+  Colors.blue.value,
+  Colors.red.value,
+  Colors.green.value,
+  Colors.amber.value,
+  Colors.purple.value,
+  Colors.yellow.value,
+  Colors.pink.value,
+];
 
 
 final List<String> availableAreas = ['Health', 'Career', 'Family', 'Study'];

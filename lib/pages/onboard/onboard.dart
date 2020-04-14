@@ -21,7 +21,12 @@ class _OnboardState extends State<Onboard> {
   Box<Area> areaBox;
   Box<Project> projectBox;
   Box<Task> taskBox;
-  final availableAreaObjs = availableAreas.map((areaname) => Area(name: areaname)).toList();
+  final availableAreaObjs = [
+    Area(color: Colors.red.value, name: 'Health'),
+    Area(color: Colors.amber.value, name: 'Family'),
+    Area(color: Colors.blue.value, name: 'Learning'),
+    Area(color: Colors.purple.value, name: 'Entertainment'),
+  ];
 
 
   @override
@@ -29,26 +34,12 @@ class _OnboardState extends State<Onboard> {
     areaBox = Hive.box(BOX_TYPE_AREA);
     projectBox = Hive.box(BOX_TYPE_PROJECT);
     taskBox = Hive.box(BOX_TYPE_TASK);
-    int initStep = 0;
-    if (areaBox.isNotEmpty) {
-      initStep++;
-    }
-    if (projectBox.isNotEmpty) {
-      initStep++;
-    }
-
-    
     if (areaBox.isEmpty) {
       availableAreaObjs.forEach((area) {
         areaBox.put(area.id, area);
       });
+      print('updated areaBox size ${areaBox.length}');
     }
-    if (initStep > step) {
-      setState(() {
-        step = initStep;
-      });
-    } 
-    
     super.initState();
   }
 
@@ -154,10 +145,10 @@ class _OnboardState extends State<Onboard> {
         titleText = 'Choose an Area';
         break;
       case 1: 
-        titleText = 'Add a project to ${chosenArea.name}';
+        titleText = chosenArea != null ? 'Add a project to ${chosenArea.name}' : 'Add a project';
         break;
       case 2: 
-        titleText = 'Add a task to ${chosenProject.name}';
+        titleText = 'Add a task to';
         break;
       
     }

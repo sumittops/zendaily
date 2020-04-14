@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:zendaily/pages/discover.dart';
 import 'package:zendaily/pages/home.dart';
 import 'package:zendaily/pages/tasks_page.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -9,7 +10,7 @@ import 'tab_nav_button.dart';
 class TabNavigation extends StatefulWidget {
   final List<Map<String, dynamic>> tabData = [
     { 'initialRoute': '/','icon': FontAwesomeIcons.yinYang, 'name': 'Home', 'index': 0,  'key': GlobalKey<NavigatorState>(), 'widget': Home()},
-    { 'initialRoute': '/productive','icon': FontAwesomeIcons.tasks, 'name': 'Productive', 'index': 1, 'key': GlobalKey<NavigatorState>(), 'widget': TasksPage(title: 'Productive',)},
+    { 'initialRoute': '/productive','icon': FontAwesomeIcons.tasks, 'name': 'Dashboard', 'index': 1, 'key': GlobalKey<NavigatorState>(), 'widget': Discover()},
     { 'initialRoute': '/chill','icon': FontAwesomeIcons.schlix, 'name': 'Fun', 'index': 2,  'key': GlobalKey<NavigatorState>(), 'widget': TasksPage(title: 'Fun',)}
   ];
 

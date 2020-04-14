@@ -20,13 +20,14 @@ class ProjectAdapter extends TypeAdapter<Project> {
       name: fields[1] as String,
       areaId: fields[3] as String,
       deadline: fields[2] as DateTime,
+      description: fields[4] as String,
     )..id = fields[0] as String;
   }
 
   @override
   void write(BinaryWriter writer, Project obj) {
     writer
-      ..writeByte(4)
+      ..writeByte(5)
       ..writeByte(0)
       ..write(obj.id)
       ..writeByte(1)
@@ -34,6 +35,8 @@ class ProjectAdapter extends TypeAdapter<Project> {
       ..writeByte(2)
       ..write(obj.deadline)
       ..writeByte(3)
-      ..write(obj.areaId);
+      ..write(obj.areaId)
+      ..writeByte(4)
+      ..write(obj.description);
   }
 }
