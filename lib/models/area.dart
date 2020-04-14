@@ -13,7 +13,11 @@ class Area extends HiveObject {
   @HiveField(1)
   String name;
 
+  @HiveField(2)
+  int color;
+
   Area({
-    @required this.name
+    @required this.name,
+    @required this.color
   }) : id = Uuid().v1();
 }

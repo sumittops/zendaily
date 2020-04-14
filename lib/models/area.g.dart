@@ -18,16 +18,19 @@ class AreaAdapter extends TypeAdapter<Area> {
     };
     return Area(
       name: fields[1] as String,
+      color: fields[2] as int,
     )..id = fields[0] as String;
   }
 
   @override
   void write(BinaryWriter writer, Area obj) {
     writer
-      ..writeByte(2)
+      ..writeByte(3)
       ..writeByte(0)
       ..write(obj.id)
       ..writeByte(1)
-      ..write(obj.name);
+      ..write(obj.name)
+      ..writeByte(2)
+      ..write(obj.color);
   }
 }
