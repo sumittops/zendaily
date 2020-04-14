@@ -24,5 +24,24 @@ class HiveRepository<T> implements IRepository<T> {
     await this._box.add(object);
   }
 
+  @override
+  Future<void> put(dynamic id, T object) async {
+    if (this.boxIsClosed) {
+      return;
+    }
+
+    await this._box.put(id, object);
+  }
+
+  
+  @override
+  Future<Iterable<T>> getAll() async {
+    if (this.boxIsClosed) {
+      return {};
+    }
+
+    return this._box.values;
+  }
+
   bool get boxIsClosed => !(this._box?.isOpen ?? false);
 }
