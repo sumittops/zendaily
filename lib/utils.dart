@@ -1,6 +1,8 @@
 
 import 'package:flutter/material.dart';
 
+import 'models/recurrence_type.dart';
+
 String toTwoDigits(int n) {
   if (n >= 10) {
     return '$n';
@@ -28,5 +30,9 @@ List<int> areaColors = [
   Colors.pink.value,
 ];
 
-
-final List<String> availableAreas = ['Health', 'Career', 'Family', 'Study'];
+final Map<RecurrenceType, String> recurrenceLabel = {
+  RecurrenceType.nonrecurring: 'One time',
+  RecurrenceType.daily: 'Daily',
+  RecurrenceType.weekly: 'Weekly',
+  RecurrenceType.monthly: 'Monthly'
+};

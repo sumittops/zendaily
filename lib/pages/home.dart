@@ -2,12 +2,12 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:neumorphic/neumorphic.dart';
+import 'package:zendaily/bloc/app/app_bloc.dart';
 import 'package:zendaily/models/task.dart';
 import 'package:zendaily/pages/task_launch.dart';
 
 
 class Home extends StatelessWidget {
-
   void handleTaskLaunch(BuildContext context, String type) {
     Box<Task> box = Hive.box('tasks');
     final totalTasks = box.length;
@@ -25,12 +25,9 @@ class Home extends StatelessWidget {
       color: Colors.grey[300],
       child: Stack(
         children: <Widget>[
-          NeuCard(
-            bevel: 1,
+          Container(
             padding: EdgeInsets.all(16),
-            decoration:NeumorphicDecoration(
-              borderRadius: BorderRadius.circular(6)
-            ),
+            color: Colors.white60,
             child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: <Widget>[

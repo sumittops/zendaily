@@ -28,7 +28,7 @@ part of 'app_bloc.dart';
 
   @override
   List<Object> get props => [
-    areas, error, areaLoading, taskLoading, projectLoading
+    areas, projects, tasks, error, areaLoading, taskLoading, projectLoading, areaProjectMap, projectTaskMap, areaTaskMap
   ];
 
 }

@@ -1,16 +1,18 @@
 import 'package:flutter/material.dart';
 
 class FadeInTransition extends StatefulWidget {
+  final Key key;
   final Widget child;
   final Duration duration;
   final double distance;
 
   FadeInTransition({
+    this.key,
     @required
     this.child,
     this.duration = const Duration(milliseconds: 500),
     this.distance = 100
-  });
+  }) : super(key: key);
 
   @override
   _FadeInTransitionState createState() => _FadeInTransitionState();

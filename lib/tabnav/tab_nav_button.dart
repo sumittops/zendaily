@@ -18,25 +18,18 @@ class TabNavButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () {
+    return NeuButton(
+      onPressed: () {
         onSelect(position);
       },
-      child: NeuCard(
-        height: 72,
-        width: 72,
-        bevel: 2,
-        decoration: NeumorphicDecoration(
-          borderRadius: BorderRadius.all(Radius.circular(36))
-        ),
-        child: Transform.scale(
-            scale: active ? 1.5 : 1,
-            child: Icon(
-            iconData,
-            size: 28,
-            color: active ? Colors.cyan : Colors.black38
+      shape: BoxShape.circle,
+      child: Padding(
+        padding: const EdgeInsets.all(4.0),
+        child: Icon(
+        iconData,
+        size: 28,
+        color: active ? Colors.cyan : Colors.black38
           ),
-        ),
       ),
     );
   }

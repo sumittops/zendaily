@@ -3,27 +3,21 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:neumorphic/neumorphic.dart';
 import 'package:zendaily/animations/fade_in.dart';
 import 'package:zendaily/models/task.dart';
-import 'package:zendaily/models/recurrence_type.dart';
 import 'package:zendaily/pages/task_runner.dart';
+import 'package:zendaily/utils.dart';
 
 
 class TaskLaunch extends StatelessWidget {
   final Task task;
-  final Duration _animationDuraton = Duration(milliseconds: 500);
+  final Duration _animationDuration = Duration(milliseconds: 500);
   final double _offset = 100;
 
   TaskLaunch({ this.task });
 
-  final Map<RecurrenceType, String> recurrenceLabel = {
-    RecurrenceType.daily: 'Daily',
-    RecurrenceType.weekly: 'Weekly',
-    RecurrenceType.monthly: 'Monthly'
-  };
-
   Widget _buildTaskCard(BuildContext context) {
     final TextTheme textTheme = Theme.of(context).textTheme;
     return FadeInTransition(
-      duration: _animationDuraton,
+      duration: _animationDuration,
       distance: _offset,
       child: Container(
         margin: EdgeInsets.symmetric(vertical: 16),
@@ -75,7 +69,7 @@ class TaskLaunch extends StatelessWidget {
             SizedBox(height: 120),
             FadeInTransition(
               distance: _offset,
-              duration: _animationDuraton,
+              duration: _animationDuration,
               child: SizedBox(
                 height: 150,
                 child: Center(
@@ -96,7 +90,7 @@ class TaskLaunch extends StatelessWidget {
             SizedBox(height: 60,),
             FadeInTransition(
               distance: _offset,
-              duration: _animationDuraton,
+              duration: _animationDuration,
               child: SizedBox(
                 height: 60,
                 child: NeuButton(

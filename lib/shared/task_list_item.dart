@@ -4,6 +4,7 @@ import 'package:zendaily/models/task.dart';
 
 class TaskListItem extends StatelessWidget {
   final Task task;
+  
 
   TaskListItem({
     this.task

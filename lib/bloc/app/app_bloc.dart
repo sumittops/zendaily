@@ -26,35 +26,42 @@ class AppBloc extends Bloc<AppEvent, AppState> {
     AppEvent event,
   ) async* {
     if (event is FetchAllData) {
-      yield AppState(areaLoading: true, projectLoading: true, taskLoading: true);
-      final areas = await _areaRepository.getAll();
-      final projects = await _projectRepository.getAll();
-      final tasks = await _taskRepository.getAll();
+      yield* _mapFetchDataEvent();
+    } else if (event is AddTaskEvent) {
+      yield* _mapAddTaskEvent(event);
+    }
+  }
 
-      Map<String, List<Project>> areaProjectMap = {};
-      projects.forEach((Project project) {
-        if(!areaProjectMap.containsKey(project.areaId)) {
-          areaProjectMap[project.areaId] = [];
-        }
-        areaProjectMap[project.areaId].add(project);
-      });
+  Stream<AppState> _mapFetchDataEvent() async* {
+    yield AppState(areaLoading: true, projectLoading: true, taskLoading: true);
+    final areas = await _areaRepository.getAll();
+    final projects = await _projectRepository.getAll();
+    final tasks = await _taskRepository.getAll();
 
-      Map<String, List<Task>> projectTaskMap = {};
-      tasks.forEach((Task task) {
-        if(!projectTaskMap.containsKey(task.areaId)) {
-          projectTaskMap[task.projectId] = [];
-        }
-        projectTaskMap[task.projectId].add(task);
-      });
+    Map<String, List<Project>> areaProjectMap = {};
+    projects.forEach((Project project) {
+      if(!areaProjectMap.containsKey(project.areaId)) {
+        areaProjectMap[project.areaId] = [];
+      }
+      areaProjectMap[project.areaId].add(project);
+    });
 
-      Map<String, List<Task>> areaTaskMap = {};
-      tasks.forEach((Task task) {
-        if(!areaTaskMap.containsKey(task.areaId)) {
-          areaTaskMap[task.areaId] = [];
-        }
-        areaTaskMap[task.areaId].add(task);
-      });
-      yield AppState(
+    Map<String, List<Task>> projectTaskMap = {};
+    tasks.forEach((Task task) {
+      if(!projectTaskMap.containsKey(task.projectId)) {
+        projectTaskMap[task.projectId] = [];
+      }
+      projectTaskMap[task.projectId].add(task);
+    });
+
+    Map<String, List<Task>> areaTaskMap = {};
+    tasks.forEach((Task task) {
+      if(!areaTaskMap.containsKey(task.areaId)) {
+        areaTaskMap[task.areaId] = [];
+      }
+      areaTaskMap[task.areaId].add(task);
+    });
+    yield AppState(
         areaLoading: false,
         projectLoading: false,
         taskLoading: false,
@@ -64,7 +71,54 @@ class AppBloc extends Bloc<AppEvent, AppState> {
         areas: areas,
         projects: projects,
         tasks: tasks
-      );
-    }
+    );
   }
+
+  Stream<AppState> _mapAddTaskEvent(AddTaskEvent event) async* {
+    Task newTask = event.task;
+    AppState currentState = event.currentState;
+    _taskRepository.put(newTask.id, newTask);
+    Map<String, List<Task>> areaTaskMap =  _getUpdatedAreaTaskMap(newTask.areaId, newTask, currentState);
+    Map<String, List<Task>> projectTaskMap = _getUpdatedProjectTaskMap(newTask.projectId, newTask, currentState);
+    final tasks = await _taskRepository.getAll();
+    yield AppState(
+      areaTaskMap: areaTaskMap,
+      projectTaskMap: projectTaskMap,
+      tasks: tasks,
+      taskLoading: false,
+      projectLoading: false,
+      areaLoading: false,
+      areaProjectMap: currentState.areaProjectMap,
+      areas: currentState.areas,
+      error: false,
+      projects: currentState.projects
+    );
+  }
+
+  Map<String, List<Task>> _getUpdatedProjectTaskMap(String projectId, Task task, AppState currentState) {
+    return {
+      ...currentState.projectTaskMap,
+      '$projectId': [
+        ...currentState.projectTaskMap[projectId],
+        task
+      ]
+    };
+  }
+
+  Map<String, List<Task>> _getUpdatedAreaTaskMap(String areaId, Task task, AppState currentState) {
+    return {
+      ...currentState.areaTaskMap,
+      '$areaId': [
+        ...currentState.areaTaskMap[areaId],
+        task
+      ]
+    };
+  }
+  @override
+  void onTransition(Transition<AppEvent, AppState> transition) {
+    print(transition);
+    super.onTransition(transition);
+  }
+
+
 }
